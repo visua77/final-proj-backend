@@ -106,15 +106,25 @@ app.post('/comments', async(req, res) => {
     }
 })
 app.get('/blogposts/:id', async(req, res) => {
-    const { id } = req.params
-    const blogpost = await Blogpost.findById(id)
-    try {
-        res.status(200).json(blogpost)
-    } catch (err) {
-        res.status(404).json({ message: 'blogpost not found' })
-    }
-})
-
+        const { id } = req.params
+        const blogpost = await Blogpost.findById(id)
+        try {
+            res.status(200).json(blogpost)
+        } catch (err) {
+            res.status(404).json({ message: 'blogpost not found' })
+        }
+    })
+    // app.post('/blogposts/:id/comments', async (req, res) => {
+    //     // find the blog post
+    //     const blogPost = await Blogpost.find({ _id: req.params.id })
+    //     const comment = new Comment(req.body)
+    //     try {
+    //       await comment.save()
+    //       res.json(comment)
+    //     } catch (err) {
+    //       res.status(400).json({ errors: err.errors })
+    //     }
+    //   })
 
 
 // för att skapa en kommentar på en specifik blogpost

@@ -13,24 +13,36 @@ const Blogpost = mongoose.model('Blogpost', {
     headline: {
         type: String,
         required: true,
-        minlenght: 5,
-        maxlenght: 140
+        minlength: 5,
+        maxlength: 140
     },
     text: {
         type: String,
         required: true,
-        minlenght: 5,
-        maxlenght: 140
+        minlength: 5,
+        maxlength: 1200
     },
     imgName: {
         type: String,
-        minlenght: 5,
-        maxlenght: 140
+        minlength: 5,
+        maxlength: 140
+    },
+    imgName2: {
+        type: String,
+        minlength: 5,
+        maxlength: 140
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    tag: {
+        type: String
+    }
 })
 const Comment = mongoose.model('Comment', {
 
@@ -53,7 +65,7 @@ const seedDB = async() => {
 
 }
 
-//seedDB()
+seedDB()
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -74,15 +86,17 @@ app.get('/', (req, res) => {
 
 // för att visa alla blogposts
 app.get('/blogposts', async(req, res) => {
-        const posts = await Blogpost.find().populate('comments')
-        res.json(posts)
-    })
-    // för att visa alla kommentarer som test
+    const posts = await Blogpost.find().populate('comments')
+    res.json(posts)
+})
+
+// för att visa alla kommentarer som test
 app.get('/comments', async(req, res) => {
-        const comments = await Comment.find()
-        res.json(comments)
-    })
-    // för att skapa en blogpost
+    const comments = await Comment.find()
+    res.json(comments)
+})
+
+// för att skapa en blogpost
 app.post('/blogposts', async(req, res) => {
     const blogpost = new Blogpost(req.body)
     try {
@@ -94,6 +108,7 @@ app.post('/blogposts', async(req, res) => {
             .json({ message: 'could not save blogpost', errors: err.errors })
     }
 })
+
 app.post('/comments', async(req, res) => {
     const comment = new Comment(req.body)
     try {
@@ -107,15 +122,13 @@ app.post('/comments', async(req, res) => {
 })
 app.get('/blogposts/:id', async(req, res) => {
     const { id } = req.params
-    const blogpost = await Blogpost.findById(id)
+    const blogpost = await Blogpost.findById(id).populate('comments')
     try {
         res.status(200).json(blogpost)
     } catch (err) {
         res.status(404).json({ message: 'blogpost not found' })
     }
 })
-
-
 
 // för att skapa en kommentar på en specifik blogpost
 app.post('/blogposts/:id/comments', async(req, res) => {

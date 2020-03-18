@@ -49,6 +49,11 @@ const Comment = mongoose.model('Comment', {
     message: String,
 })
 
+const Image = mongoose.model('Image', {
+
+    imgUrl: String,
+})
+
 const seedDB = async() => {
     await Blogpost.deleteMany()
         //await Comment.deleteMany()
@@ -96,6 +101,12 @@ app.get('/comments', async(req, res) => {
     res.json(comments)
 })
 
+// för att visa alla bilder
+app.get('/images', async(req, res) => {
+    const allImg = await Image.find()
+    res.json(allImg)
+})
+
 // för att skapa en blogpost
 app.post('/blogposts', async(req, res) => {
     const blogpost = new Blogpost(req.body)
@@ -120,6 +131,23 @@ app.post('/comments', async(req, res) => {
             .json({ message: 'could not save comment', errors: err.errors })
     }
 })
+
+// för att lägga in bilder
+app.post('/images', async(req, res) => {
+    const img = new Image(req.body)
+    try {
+        const saved = await img.save()
+        res.status(201).json(saved)
+    } catch (err) {
+        res
+            .status(400)
+            .json({ message: 'could not save img', errors: err.errors })
+    }
+})
+
+
+
+
 app.get('/blogposts/:id', async(req, res) => {
     const { id } = req.params
     const blogpost = await Blogpost.findById(id).populate('comments')

@@ -16,11 +16,21 @@ const Blogpost = mongoose.model('Blogpost', {
         minlength: 5,
         maxlength: 140
     },
-    text: {
+    textOne: {
         type: String,
         required: true,
         minlength: 5,
-        maxlength: 1200
+        maxlength: 5200
+    },
+    textTwo: {
+        type: String,
+        minlength: 0,
+        maxlength: 5200
+    },
+    textThree: {
+        type: String,
+        minlength: 0,
+        maxlength: 5200
     },
     imgName: {
         type: String,
@@ -29,8 +39,11 @@ const Blogpost = mongoose.model('Blogpost', {
     },
     imgName2: {
         type: String,
-        minlength: 5,
-        maxlength: 140
+
+    },
+    imgName3: {
+        type: String,
+
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -70,7 +83,7 @@ const seedDB = async() => {
 
 }
 
-seedDB()
+//seedDB()
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
@@ -91,7 +104,8 @@ app.get('/', (req, res) => {
 
 // för att visa alla blogposts
 app.get('/blogposts', async(req, res) => {
-    const posts = await Blogpost.find().populate('comments')
+    const posts = await Blogpost.find().populate('comments').limit(20).sort({ createdAt: 'desc' })
+
     res.json(posts)
 })
 

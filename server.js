@@ -68,8 +68,8 @@ const Image = mongoose.model('Image', {
 })
 
 const seedDB = async() => {
-    await Blogpost.deleteMany()
-        //await Comment.deleteMany()
+    //await Blogpost.deleteMany()
+    await Comment.deleteMany()
 
     /*     const hd1 = new Blogpost({ headline: 'this is test' })
         await hd1.save()
@@ -83,7 +83,7 @@ const seedDB = async() => {
 
 }
 
-//seedDB()
+seedDB()
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:

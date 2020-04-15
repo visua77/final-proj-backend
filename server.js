@@ -83,7 +83,7 @@ const seedDB = async() => {
 
 }
 
-seedDB()
+//seedDB()
 
 // Defines the port the app will run on. Defaults to 8080, but can be 
 // overridden when starting the server. For example:
